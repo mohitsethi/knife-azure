@@ -31,6 +31,20 @@ class Azure
       end
       disks
     end
+    
+    #MS: Function creates disk
+    def create(params)
+      disk = Disk.new(@connection)
+      disk.create(params)
+    end
+
+    def delete (name)
+      if self.exists name
+          servicecall = "DataDisks/" + name
+        @connection.query_azure(servicecall, "delete")
+      end
+    end
+    
     def find(name)
       founddisk = nil
       self.all.each do |disk|
@@ -58,5 +72,20 @@ class Azure
       @name = disk.at_css('Name').content
       @attached = disk.at_css('AttachedTo') != nil
     end
+
+    def create(params)
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.DataVirtualHardDisk('xmlns'=>'http://schemas.microsoft.com/windowsazure') {
+          xml.HostCaching params[:host_caching] || 'ReadWrite'
+          xml.DiskLabel params[:disk_label]
+          xml.DiskName params[:disk_name]
+          xml.Lun params[:disk_lun]
+          xml.LogicalDiskSizeInGB[:disk_size]
+          xml.MediaLink[media_link]
+        }
+      end
+      @connection.query_azure("DataDisks", "post", builder.to_xml)
+    end
+
   end
 end
