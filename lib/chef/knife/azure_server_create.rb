@@ -102,24 +102,24 @@ class Chef
         :boolean => true,
         :default => true
 
-      option :hosted_service_name,
+      option :azure_hosted_service_name,
         :short => "-s NAME",
-        :long => "--hosted-service-name NAME",
+        :long => "--azure-hosted-service-name NAME",
         :description => "specifies the name for the hosted service"
 
-      option :hosted_service_description,
+      option :azure_hosted_service_description,
         :short => "-D DESCRIPTION",
-        :long => "--hosted_service_description DESCRIPTION",
+        :long => "--azure-hosted-service-description DESCRIPTION",
         :description => "Description for the hosted service"
 
-      option :storage_account,
+      option :azure_storage_account,
         :short => "-a NAME",
-        :long => "--storage-account NAME",
+        :long => "--azure-storage-account NAME",
         :description => "specifies the name for the hosted service"
 
-      option :role_name,
-        :short => "-R name",
-        :long => "--role-name NAME",
+      option :azure_role_name,
+        :short => "-R NAME",
+        :long => "--azure-role-name ROLE-NAME",
         :description => "specifies the name for the virtual machine"
 
       option :host_name,
@@ -127,24 +127,24 @@ class Chef
         :long => "--host-name NAME",
         :description => "specifies the host name for the virtual machine"
 
-      option :service_location,
+      option :azure_service_location,
         :short => "-m LOCATION",
-        :long => "--service-location LOCATION",
+        :long => "--azure-service-location LOCATION",
         :description => "specify the Geographic location for the virtual machine and services"
 
-      option :os_disk_name,
+      option :azure_os_disk_name,
         :short => "-o DISKNAME",
-        :long => "--os-disk-name DISKNAME",
+        :long => "--azure-os-disk-name DISKNAME",
         :description => "unique name for specifying os disk (optional)"
 
-      option :source_image,
+      option :azure_source_image,
         :short => "-I IMAGE",
-        :long => "--source-image IMAGE",
+        :long => "--azure-source-image IMAGE",
         :description => "disk image name to use to create virtual machine"
 
-      option :role_size,
+      option :azure_role_size,
         :short => "-z SIZE",
-        :long => "--role-size SIZE",
+        :long => "--azure-role-size SIZE",
         :description => "size of virtual machine (ExtraSmall, Small, Medium, Large, ExtraLarge)"
 
       option :tcp_endpoints,
@@ -225,13 +225,13 @@ class Chef
           :azure_subscription_id, 
           :azure_mgmt_cert, 
           :azure_host_name,
-          :role_name, 
+          :azure_role_name, 
           :host_name, 
           :ssh_user, 
           :ssh_password, 
-          :service_location, 
-          :source_image, 
-          :role_size
+          :azure_service_location, 
+          :azure_source_image, 
+          :azure_role_size
         ].each do |key|
           key = key.to_sym
           details << key.to_s
@@ -255,18 +255,18 @@ class Chef
         Chef::Log.info("creating...")
       
         Chef::Log.info("Using the #{locate_config_value(:bootstrap_protocol)} protocol for bootstrapping")
-        if not locate_config_value(:hosted_service_name)
-          config[:hosted_service_name] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join
+        if not locate_config_value(:azure_hosted_service_name)
+          config[:azure_hosted_service_name] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join
         end
 
         #If Storage Account is not specified, check if the geographic location has one to re-use 
-        if not locate_config_value(:storage_account)
+        if not locate_config_value(:azure_storage_account)
           storage_accts = connection.storageaccounts.all
-          storage = storage_accts.find { |storage_acct| storage_acct.location.to_s == locate_config_value(:service_location) }
+          storage = storage_accts.find { |storage_acct| storage_acct.location.to_s == locate_config_value(:azure_service_location) }
           if not storage
-            config[:storage_account] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join.downcase
+            config[:azure_storage_account] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join.downcase
           else
-            config[:storage_account] = storage.name.to_s
+            config[:azure_storage_account] = storage.name.to_s
           end
         end
         if is_platform_windows?
@@ -301,7 +301,6 @@ class Chef
               sleep @initial_sleep_delay ||= 10
               puts("done")
            }
-
           end
           sleep 15
           bootstrap_for_windows_node(server,fqdn).run
@@ -397,24 +396,24 @@ class Chef
               :azure_subscription_id, 
               :azure_mgmt_cert, 
               :azure_host_name,
-              :role_name, 
+              :azure_role_name, 
               :host_name, 
-              :service_location, 
-              :source_image, 
-              :role_size
+              :azure_service_location, 
+              :azure_source_image, 
+              :azure_role_size
         ])
       end
 
       def create_server_def
         server_def = {
-          :hosted_service_name => locate_config_value(:hosted_service_name), 
-          :storage_account => locate_config_value(:storage_account),
-          :role_name => locate_config_value(:role_name), 
-          :host_name => locate_config_value(:host_name), 
-          :service_location => locate_config_value(:service_location), 
-          :os_disk_name => locate_config_value(:os_disk_name), 
-          :source_image => locate_config_value(:source_image), 
-          :role_size => locate_config_value(:role_size),
+          :azure_hosted_service_name => locate_config_value(:azure_hosted_service_name),
+          :azure_storage_account => locate_config_value(:azure_storage_account),
+          :azure_role_name => locate_config_value(:azure_role_name),
+          :host_name => locate_config_value(:host_name),
+          :azure_service_location => locate_config_value(:service_location),
+          :azure_os_disk_name => locate_config_value(:azure_os_disk_name),
+          :azure_source_image => locate_config_value(:azure_source_image),
+          :azure_role_size => locate_config_value(:azure_role_size),
           :tcp_endpoints => locate_config_value(:tcp_endpoints),
           :udp_endpoints => locate_config_value(:udp_endpoints),
           :bootstrap_proto => locate_config_value(:bootstrap_protocol)
