@@ -53,8 +53,8 @@ class Chef
             :description => "Your Azure host name",
             :proc => Proc.new { |key| Chef::Config[:knife][:azure_host_name] = key }
 
-          option :verify_ssl_cert,
-            :long => "--verify-ssl-cert",
+          option :azure_verify_ssl_cert,
+            :long => "--azure-verify-ssl-cert",
             :description => "Verify SSL Certificates for communication over HTTPS",
             :boolean => true,
             :default => false
@@ -72,7 +72,7 @@ class Chef
                             :azure_subscription_id => locate_config_value(:azure_subscription_id),
                             :azure_mgmt_cert => locate_config_value(:azure_mgmt_cert),
                             :azure_host_name => locate_config_value(:azure_host_name),
-                            :verify_ssl_cert => locate_config_value(:verify_ssl_cert)
+                            :azure_verify_ssl_cert => locate_config_value(:azure_verify_ssl_cert)
                           )
                         end        
       end
