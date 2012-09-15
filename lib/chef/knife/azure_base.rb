@@ -53,8 +53,8 @@ class Chef
             :description => "Your Azure host name",
             :proc => Proc.new { |key| Chef::Config[:knife][:azure_host_name] = key }
 
-          option :azure_verify_ssl_cert,
-            :long => "--azure-verify-ssl-cert",
+          option verify_ssl_cert,
+            :long => "--verify-ssl-cert",
             :description => "Verify SSL Certificates for communication over HTTPS",
             :boolean => true,
             :default => false
@@ -63,7 +63,7 @@ class Chef
 
       def is_image_windows?
         images = connection.images
-        target_image = images.all.select { |i| i.name == locate_config_value(:source_image) }
+        target_image = images.all.select { |i| i.name == locate_config_value(:azure_source_image) }
         return target_image[0].os == 'Windows'
       end
       def connection
@@ -72,7 +72,7 @@ class Chef
                             :azure_subscription_id => locate_config_value(:azure_subscription_id),
                             :azure_mgmt_cert => locate_config_value(:azure_mgmt_cert),
                             :azure_host_name => locate_config_value(:azure_host_name),
-                            :azure_verify_ssl_cert => locate_config_value(:azure_verify_ssl_cert)
+                            :verify_ssl_cert => locate_config_value(:verify_ssl_cert)
                           )
                         end        
       end

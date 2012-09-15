@@ -256,7 +256,7 @@ class Chef
       
         Chef::Log.info("Using the #{locate_config_value(:bootstrap_protocol)} protocol for bootstrapping")
         if not locate_config_value(:azure_hosted_service_name)
-          config[:azure_hosted_service_name] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join
+          config[:azure_hosted_service_name] = [strip_non_ascii(locate_config_value(:azure_role_name)), random_string].join
         end
 
         #If Storage Account is not specified, check if the geographic location has one to re-use 
@@ -264,7 +264,7 @@ class Chef
           storage_accts = connection.storageaccounts.all
           storage = storage_accts.find { |storage_acct| storage_acct.location.to_s == locate_config_value(:azure_service_location) }
           if not storage
-            config[:azure_storage_account] = [strip_non_ascii(locate_config_value(:role_name)), random_string].join.downcase
+            config[:azure_storage_account] = [strip_non_ascii(locate_config_value(:azure_role_name)), random_string].join.downcase
           else
             config[:azure_storage_account] = storage.name.to_s
           end
@@ -410,7 +410,7 @@ class Chef
           :azure_storage_account => locate_config_value(:azure_storage_account),
           :azure_role_name => locate_config_value(:azure_role_name),
           :host_name => locate_config_value(:host_name),
-          :azure_service_location => locate_config_value(:service_location),
+          :azure_service_location => locate_config_value(:azure_service_location),
           :azure_os_disk_name => locate_config_value(:azure_os_disk_name),
           :azure_source_image => locate_config_value(:azure_source_image),
           :azure_role_size => locate_config_value(:azure_role_size),
