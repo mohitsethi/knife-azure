@@ -75,7 +75,7 @@ option :azure_mgmt_cert,
 
 option :azure_host_name,
   :short => "-H HOSTNAME",
-  :long => "--azure_host_name HOSTNAME",
+  :long => "--azure-host-name HOSTNAME",
   :description => "Your Azure host name",
 
 option :verify_ssl_cert,
@@ -137,19 +137,19 @@ option :no_host_key_verify,
   :boolean => true,
   :default => false
 
-option :hosted_service_name,
+option :azure_hosted_service_name,
   :short => "-s NAME",
-  :long => "--hosted-service-name NAME",
+  :long => "--azure-hosted-service-name NAME",
   :description => "specifies the name for the hosted service"
 
-option :hosted_service_description,
+option :azure_hosted_service_description,
   :short => "-D DESCRIPTION",
-  :long => "--hosted_service_description DESCRIPTION",
+  :long => "--azure-hosted_service_description DESCRIPTION",
   :description => "Description for the hosted service"
 
-option :role_name,
+option :azure_role_name,
   :short => "-R name",
-  :long => "-- role-name NAME",
+  :long => "--azure-role-name NAME",
   :description => "specifies the name for the virtual machine"
 
 option :host_name,
@@ -157,29 +157,29 @@ option :host_name,
   :long => "--host-name NAME",
   :description => "specifies the host name for the virtual machine"
 
-option :storage_account,
+option :azure_storage_account,
   :short => "-a NAME",
-  :long => "--storage-account NAME",
+  :long => "--azure-storage-account NAME",
   :description => "specifies the name for the hosted service"
 
-option :service_location,
+option :azure_service_location,
   :short => "-m LOCATION",
-  :long => "--service-location LOCATION",
+  :long => "--azure-service-location LOCATION",
   :description => "specify the Geographic location for the virtual machine and services. eg. West US, East US, North Europe East Asia etc"
 
-option :os_disk_name,
+option :azure_os_disk_name,
   :short => "-o DISKNAME",
-  :long => "--os-disk-name DISKNAME",
+  :long => "--azure-os-disk-name DISKNAME",
   :description => "unique name for specifying os disk (optional)"
 
-option :source_image,
+option :azure_source_image,
   :short => "-I IMAGE",
-  :long => "--source-image IMAGE",
+  :long => "--azure-source-image IMAGE",
   :description => "disk image name to use to create virtual machine"
 
-option :role_size,
+option :azure_role_size,
   :short => "-z SIZE",
-  :long => "--role-size SIZE",
+  :long => "--azure-role-size SIZE",
   :description => "size of virtual machine (ExtraSmall, Small, Medium, Large, ExtraLarge)"
 
 option :tcp_endpoints,
@@ -249,21 +249,21 @@ knife[:azure_mgmt_cert] = "ManagementCertificate.pem"
 
 knife[:azure_host_name] = "management-preview.core.windows-int.net"
 
-knife[:service_location] = 'West US'
+knife[:azure_service_location] = 'West US'
 
-knife[:hosted_service_name]='service001'
+knife[:azure_hosted_service_name]='service001'
 
-knife[:role_name]='role105'
+knife[:azure_role_name]='role105'
 
-knife[:host_name]='host105'
+knife[:azure_host_name]='host105'
 
 knife[:ssh_user]='jetstream'
 
 knife[:ssh_password]='jetstream1!'
 
-knife[:storage_account]='auxpreview104'
+knife[:azure_storage_account]='auxpreview104'
 
-knife[:os_disk_name]='disk107'
+knife[:azure_os_disk_name]='disk107'
 
 knife[:distro]='centos5-gems'
 
@@ -275,17 +275,17 @@ knife[:udp_endpoints]='77,88,99'
 
 #  note that the role_size must be Medium or larger
 
-knife[:source_image]='OpenLogic__OpenLogic-CentOS-62-20120509-en-us-30GB.vhd'
+knife[:azure_source_image]='OpenLogic__OpenLogic-CentOS-62-20120509-en-us-30GB.vhd'
 
-knife[:role_size]='Medium'
+knife[:azure_role_size]='Medium'
 
 # Alternatively, at the present time you could use a SUSE image
 
 #  note that you can use Small or ExtraSmall for the role_size
 
-knife[:source_image]='SUSE__OpenSUSE64121-03192012-en-us-15GB.vhd'
+knife[:azure_source_image]='SUSE__OpenSUSE64121-03192012-en-us-15GB.vhd'
 
-knife[:role_size]='Small'
+knife[:azure_role_size]='Small'
 
 
 ==== Sample knife.rb for bootstrapping Windows Node with Basic Authentication
@@ -300,7 +300,7 @@ knife[:winrm_port] = '5985'
 
 knife[:distro] = 'windows-chef-client-msi'
 
-knife[:source_image]='w2k12Basic.vhd'
+knife[:azure_source_image]='w2k12Basic.vhd'
 
 ==Subcommands
 This plugin provides the following Knife subcommands. Specific command options can be found by invoking the subcommand with a --help flag
@@ -318,7 +318,7 @@ Outputs a list of all servers in the currently configured Azure account. PLEASE 
 Outputs detail about a specific role, including all the ports that it has open
 
 ===knife azure image list
-Outputs a list of all linux images that are available to use for provisioning. You should choose one of these to use for the :source_image parameter to the server create command.
+Outputs a list of all linux images that are available to use for provisioning. You should choose one of these to use for the :azure_source_image parameter to the server create command.
 
 
 ===knife azure server describe
